@@ -73,19 +73,8 @@ button.secondary{background:#6b7280}
 </div>
 
 <div id="editView" style="display:none">
-  <div class="top-summary"><h3>한줄 평가</h3>
-    <textarea id="oneLine" oninput="saveCurrent()" placeholder="이 항목에 대한 한줄 평가를 입력하세요."></textarea>
-    <div class="saved" id="saveStatus">자동 저장 대기 중</div>
-  </div>
-  <div class="card">
-    <div class="section-title" id="currentTitle">송팀장</div>
-    <p class="small">텍스트는 이곳에 메모하고, ChatGPT가 정리한 최종 내용은 아래 기록 부분에 붙여넣는다.</p>
-    <textarea id="rawInput" oninput="saveCurrent()" placeholder="임시 메모를 입력하세요."></textarea>
-  </div>
-  <div class="card"><h3>기록</h3>
-    <p class="small">소제목을 먼저 적고, 수정 버튼을 눌러 내용을 추가한다. 이미지 캡처는 기록창 안에 바로 붙여넣으면 텍스트 중간에 들어간다.</p>
-    <div class="record-title">소제목</div>
-    <input id="recordSubtitle" oninput="saveCurrent()" placeholder="예) 10GW 전력 확보와 CAPEX 가정">
+<div class="card"><h3>기록</h3>
+    <p class="small">수정 버튼을 눌러 바로 내용을 추가한다. 이미지 캡처는 기록창 안에 바로 붙여넣으면 텍스트 중간에 들어간다.</p>
     <div class="toolbar">
       <button id="editBtn" onclick="toggleEdit()">수정</button>
       <button onclick="insertBullet()">새 기록 추가</button>
@@ -125,27 +114,20 @@ function migrateOldStorage(){
 }
 migrateOldStorage();
 
-function ensureItem(name){if(!data[name])data[name]={oneLine:'',rawInput:'',recordSubtitle:'',recordHtml:'',updatedAt:''};}
+function ensureItem(name){if(!data[name])data[name]={recordHtml:'',updatedAt:''};}
 function saveAll(){localStorage.setItem(STORAGE_KEY,JSON.stringify(data));}
 function saveCurrent(){
   ensureItem(current);
-  const ol=document.getElementById('oneLine'); if(!ol)return;
-  data[current].oneLine=ol.value;
-  data[current].rawInput=document.getElementById('rawInput').value;
-  data[current].recordSubtitle=document.getElementById('recordSubtitle').value;
-  data[current].recordHtml=document.getElementById('recordEditor').innerHTML;
-  data[current].updatedAt=new Date().toISOString();
+  const editor = document.getElementById('recordEditor');
+  if(!editor) return;
+  data[current].recordHtml = editor.innerHTML;
+  data[current].updatedAt = new Date().toISOString();
   saveAll();
-  document.getElementById('saveStatus').innerText='자동 저장됨';
 }
 function loadCurrent(){
   ensureItem(current);
-  document.getElementById('currentTitle').innerText=current;
-  document.getElementById('oneLine').value=data[current].oneLine||'';
-  document.getElementById('rawInput').value=data[current].rawInput||'';
-  document.getElementById('recordSubtitle').value=data[current].recordSubtitle||'';
-  document.getElementById('recordEditor').innerHTML=data[current].recordHtml||'';
-  document.getElementById('saveStatus').innerText='저장된 내용 불러옴';
+  document.getElementById('currentTitle').innerText = current;
+  document.getElementById('recordEditor').innerHTML = data[current].recordHtml || '';
 }
 function selectItem(name,el){
   if(document.getElementById('editView').style.display!=='none')saveCurrent();
@@ -184,7 +166,7 @@ function renderRecentFeed(){
   }).filter(r=>r.updated&&r.updated.getTime()>=seven&&r.content).sort((a,b)=>b.updated-a.updated);
   if(!rows.length){feed.innerHTML='<div class="empty">최근 7일 안에 작성된 기록이 없습니다.</div>';return;}
   feed.innerHTML=rows.map(r=>{
-    const title=r.item.recordSubtitle||firstLine(r.content)||'제목 없음';
+    const title=firstBulletOrLine(r.content)||'제목 없음';
     const body=r.content.length>450?r.content.slice(0,450)+'...':r.content;
     const date=r.updated.toLocaleString('ko-KR');
     return `<div class="feed-row" onclick="openFromFeed('${escapeAttr(r.key)}')">
@@ -198,6 +180,11 @@ function renderRecentFeed(){
   }).join('');
 }
 function firstLine(text){return (text||'').split('\\n').map(s=>s.trim()).find(Boolean)||'';}
+function firstBulletOrLine(text){
+  const lines = (text||'').split('\\n').map(s=>s.trim()).filter(Boolean);
+  const bullet = lines.find(s => s.startsWith('•') || s.startsWith('-'));
+  return (bullet || lines[0] || '').replace(/^[•\-]\s*/, '');
+}
 function openFromFeed(name){const target=Array.from(document.querySelectorAll('.item')).find(i=>i.innerText.trim()===name);selectItem(name,target);}
 function escapeHtml(str){return String(str).replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));}
 function escapeAttr(str){return String(str).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
@@ -244,7 +231,7 @@ function importBackup(event){
 function deleteCurrentRecord(){
   ensureItem(current);
   if(!confirm(current + ' 기록을 삭제할까요? 한줄 평가, 임시 메모, 기록 내용이 모두 비워집니다.')) return;
-  data[current] = { oneLine:'', rawInput:'', recordSubtitle:'', recordHtml:'', updatedAt:new Date().toISOString() };
+  data[current] = { recordHtml:'', updatedAt:new Date().toISOString() };
   saveAll();
   loadCurrent();
   renderRecentFeed();
