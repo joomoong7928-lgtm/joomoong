@@ -15,21 +15,20 @@ body{margin:0;font-family:'Malgun Gothic',Arial,sans-serif;display:flex;min-heig
 .item:hover{background:#e5e7eb}
 .item.active{background:#111827;color:white}
 .quote{background:#fff;border-left:5px solid #444;padding:18px 20px;border-radius:10px;line-height:1.75;margin-bottom:22px}
+.top-summary{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:18px;margin-bottom:20px}
 .card{background:white;border:1px solid #ddd;border-radius:10px;padding:18px;margin-bottom:16px}
-.section-title{font-size:24px;font-weight:700;margin-bottom:12px}
-textarea{width:100%;min-height:90px;font-size:16px;line-height:1.6;padding:12px;border:1px solid #ccc;border-radius:8px;resize:vertical}
+textarea,input{width:100%;font-size:15px;line-height:1.6;padding:12px;border:1px solid #ccc;border-radius:8px}
+textarea{min-height:120px;resize:vertical}
 button{padding:10px 14px;border:0;border-radius:8px;background:#111827;color:white;cursor:pointer;margin-top:10px;margin-right:8px}
 button.secondary{background:#6b7280}
-button.danger{background:#b91c1c;padding:6px 9px;font-size:12px}
 .small{font-size:13px;color:#666;line-height:1.6}
+.section-title{font-size:22px;font-weight:700;margin-bottom:8px}
 .saved{font-size:13px;color:#15803d;margin-top:8px}
-.timeline{display:flex;flex-direction:column;gap:14px}
-.entry{background:white;border:1px solid #ddd;border-radius:10px;padding:16px}
-.entry-date{font-size:13px;color:#666;margin-bottom:8px}
-.entry-text{white-space:pre-wrap;line-height:1.7;font-size:15px}
-.entry img{max-width:260px;max-height:220px;border-radius:8px;border:1px solid #ddd;cursor:pointer}
-.entry-actions{margin-top:8px}
-input[type=file]{margin-top:8px}
+.record-title{font-size:15px;font-weight:700;margin-bottom:8px}
+.editor{width:100%;min-height:320px;border:1px solid #ccc;border-radius:8px;padding:14px;background:#fff;line-height:1.7;overflow:auto}
+.editor[contenteditable="false"]{background:#f9fafb}
+.editor img{max-width:100%;height:auto;border:1px solid #ddd;border-radius:8px;margin:10px 0;display:block}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
 </style>
 </head>
 <body>
@@ -62,165 +61,124 @@ input[type=file]{margin-top:8px}
 스스로를 끊임없이 의심하되, 충분히 검증한 투자 원칙으로 기다리자.
 </div>
 
+<div class="top-summary">
+<h3>한줄 평가</h3>
+<textarea id="oneLine" oninput="saveCurrent()" placeholder="이 항목에 대한 한줄 평가를 입력하세요."></textarea>
+<div class="saved" id="saveStatus">자동 저장 대기 중</div>
+</div>
+
 <div class="card">
 <div class="section-title" id="currentTitle">송팀장</div>
-<p class="small">
-입력창에 내용을 적고 Enter를 누르면 아래 타임라인에 순서대로 저장된다.<br>
-줄바꿈은 Shift + Enter를 사용한다.
-</p>
-<textarea id="quickInput" placeholder="내용 입력 후 Enter"></textarea>
-<button onclick="addTextEntry()">추가</button>
-<button class="secondary" onclick="downloadBackup()">전체 백업 다운로드</button>
-<div class="saved" id="saveStatus">저장 대기 중</div>
+<p class="small">텍스트는 이곳에 메모하고, ChatGPT가 정리한 최종 내용은 아래 기록 부분에 붙여넣는다.</p>
+<textarea id="rawInput" oninput="saveCurrent()" placeholder="임시 메모를 입력하세요."></textarea>
 </div>
 
 <div class="card">
-<h3>이미지 추가</h3>
-<p class="small">이미지는 해당 항목의 타임라인에 날짜와 함께 저장된다.</p>
-<input type="file" id="imageInput" accept="image/*" multiple onchange="addImages(event)">
+<h3>기록</h3>
+<p class="small">소제목을 먼저 적고, 수정 버튼을 눌러 내용을 추가한다. 이미지 캡처는 기록창 안에 바로 붙여넣으면 텍스트 중간에 들어간다.</p>
+
+<div class="record-title">소제목</div>
+<input id="recordSubtitle" oninput="saveCurrent()" placeholder="예) 10GW 전력 확보와 CAPEX 가정">
+
+<div class="toolbar">
+<button id="editBtn" onclick="toggleEdit()">수정</button>
+<button onclick="insertToday()">오늘 날짜 넣기</button>
+<button class="secondary" onclick="saveCurrent()">저장</button>
+<button class="secondary" onclick="downloadBackup()">전체 백업 다운로드</button>
 </div>
 
-<h3>기록</h3>
-<div id="timeline" class="timeline"></div>
+<div id="recordEditor" class="editor" contenteditable="false" oninput="saveCurrent()"></div>
+</div>
 </div>
 
 <script>
-const STORAGE_KEY = 'economic_freedom_wiki_v2_timeline';
+const STORAGE_KEY = 'economic_freedom_wiki_v2';
 let current = '송팀장';
 let data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+let editing = false;
 
 function ensureItem(name){
-  if(!data[name]) data[name] = [];
+  if(!data[name]){
+    data[name] = { oneLine:'', rawInput:'', recordSubtitle:'', recordHtml:'' };
+  }
 }
 
 function saveAll(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function saveCurrent(){
+  ensureItem(current);
+  data[current].oneLine = document.getElementById('oneLine').value;
+  data[current].rawInput = document.getElementById('rawInput').value;
+  data[current].recordSubtitle = document.getElementById('recordSubtitle').value;
+  data[current].recordHtml = document.getElementById('recordEditor').innerHTML;
+  saveAll();
   document.getElementById('saveStatus').innerText = '자동 저장됨';
 }
 
-function nowText(){
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth()+1).padStart(2,'0');
-  const day = String(d.getDate()).padStart(2,'0');
-  const h = String(d.getHours()).padStart(2,'0');
-  const min = String(d.getMinutes()).padStart(2,'0');
-  return `${y}-${m}-${day} ${h}:${min}`;
+function loadCurrent(){
+  ensureItem(current);
+  document.getElementById('currentTitle').innerText = current;
+  document.getElementById('oneLine').value = data[current].oneLine || '';
+  document.getElementById('rawInput').value = data[current].rawInput || '';
+  document.getElementById('recordSubtitle').value = data[current].recordSubtitle || '';
+  document.getElementById('recordEditor').innerHTML = data[current].recordHtml || '';
+  document.getElementById('saveStatus').innerText = '저장된 내용 불러옴';
 }
 
 function selectItem(name, el){
+  saveCurrent();
   current = name;
-  ensureItem(current);
   document.querySelectorAll('.item').forEach(i=>i.classList.remove('active'));
   el.classList.add('active');
-  document.getElementById('currentTitle').innerText = name;
-  document.getElementById('quickInput').value = '';
-  renderTimeline();
+  loadCurrent();
 }
 
-function addTextEntry(){
-  const input = document.getElementById('quickInput');
-  const text = input.value.trim();
-  if(!text) return;
-  ensureItem(current);
-  data[current].unshift({
-    type:'text',
-    date:nowText(),
-    content:text
-  });
-  input.value = '';
-  saveAll();
-  renderTimeline();
+function toggleEdit(){
+  editing = !editing;
+  const editor = document.getElementById('recordEditor');
+  const btn = document.getElementById('editBtn');
+  editor.contentEditable = editing ? 'true' : 'false';
+  btn.innerText = editing ? '수정 완료' : '수정';
+  if(editing) editor.focus();
+  saveCurrent();
 }
 
-document.getElementById('quickInput').addEventListener('keydown', function(e){
-  if(e.key === 'Enter' && !e.shiftKey){
-    e.preventDefault();
-    addTextEntry();
+function today(){
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function insertToday(){
+  const editor = document.getElementById('recordEditor');
+  if(!editing){ toggleEdit(); }
+  editor.focus();
+  document.execCommand('insertHTML', false, '<p><strong>' + today() + '</strong></p><p>■ 핵심 내용</p><ul><li></li></ul><p>■ 내가 이해한 의미</p><ul><li></li></ul>');
+  saveCurrent();
+}
+
+document.getElementById('recordEditor').addEventListener('paste', function(e){
+  const items = e.clipboardData && e.clipboardData.items;
+  if(!items) return;
+  for(let i=0; i<items.length; i++){
+    const item = items[i];
+    if(item.type.indexOf('image') !== -1){
+      e.preventDefault();
+      const file = item.getAsFile();
+      const reader = new FileReader();
+      reader.onload = function(event){
+        document.execCommand('insertHTML', false, '<img src="' + event.target.result + '">');
+        saveCurrent();
+      };
+      reader.readAsDataURL(file);
+      return;
+    }
   }
 });
 
-function addImages(event){
-  ensureItem(current);
-  const files = Array.from(event.target.files || []);
-  files.forEach(file => {
-    if(!file.type.startsWith('image/')) return;
-    const reader = new FileReader();
-    reader.onload = function(e){
-      data[current].unshift({
-        type:'image',
-        date:nowText(),
-        name:file.name,
-        src:e.target.result
-      });
-      saveAll();
-      renderTimeline();
-    };
-    reader.readAsDataURL(file);
-  });
-  event.target.value = '';
-}
-
-function renderTimeline(){
-  ensureItem(current);
-  const box = document.getElementById('timeline');
-  box.innerHTML = '';
-
-  if(data[current].length === 0){
-    box.innerHTML = '<p class="small">아직 기록이 없습니다.</p>';
-    return;
-  }
-
-  data[current].forEach((entry, index) => {
-    const div = document.createElement('div');
-    div.className = 'entry';
-
-    const date = document.createElement('div');
-    date.className = 'entry-date';
-    date.textContent = entry.date;
-    div.appendChild(date);
-
-    if(entry.type === 'text'){
-      const text = document.createElement('div');
-      text.className = 'entry-text';
-      text.textContent = entry.content;
-      div.appendChild(text);
-    }
-
-    if(entry.type === 'image'){
-      const img = document.createElement('img');
-      img.src = entry.src;
-      img.onclick = () => window.open(entry.src, '_blank');
-      div.appendChild(img);
-
-      const name = document.createElement('div');
-      name.className = 'small';
-      name.textContent = entry.name || '이미지';
-      div.appendChild(name);
-    }
-
-    const actions = document.createElement('div');
-    actions.className = 'entry-actions';
-
-    const del = document.createElement('button');
-    del.className = 'danger';
-    del.textContent = '삭제';
-    del.onclick = () => deleteEntry(index);
-    actions.appendChild(del);
-
-    div.appendChild(actions);
-    box.appendChild(div);
-  });
-}
-
-function deleteEntry(index){
-  if(!confirm('이 기록을 삭제할까요?')) return;
-  data[current].splice(index, 1);
-  saveAll();
-  renderTimeline();
-}
-
 function downloadBackup(){
+  saveCurrent();
   const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -230,8 +188,7 @@ function downloadBackup(){
   URL.revokeObjectURL(url);
 }
 
-ensureItem(current);
-renderTimeline();
+loadCurrent();
 </script>
 </body>
 </html>
