@@ -91,6 +91,9 @@ button.secondary{background:#6b7280}
       <button onclick="insertBullet()">새 기록 추가</button>
       <button class="secondary" onclick="saveCurrent()">저장</button>
       <button class="secondary" onclick="downloadBackup()">전체 백업 다운로드</button>
+      <button class="secondary" onclick="document.getElementById('backupInput').click()">백업 불러오기</button>
+      <button class="secondary" onclick="deleteCurrentRecord()">기록 삭제</button>
+      <input id="backupInput" type="file" accept="application/json" style="display:none" onchange="importBackup(event)">
     </div>
     <div id="recordEditor" class="editor" contenteditable="false" oninput="saveCurrent()"></div>
   </div>
@@ -104,6 +107,23 @@ let loaded=localStorage.getItem(STORAGE_KEY);
 if(!loaded){for(const k of OLD_KEYS){loaded=localStorage.getItem(k);if(loaded)break;}}
 let data=JSON.parse(loaded||'{}');
 let current='송팀장', editing=false;
+
+// 업그레이드해도 기존 데이터가 이어지도록 이전 저장소 내용을 병합한다.
+function migrateOldStorage(){
+  for(const k of OLD_KEYS){
+    const oldRaw = localStorage.getItem(k);
+    if(!oldRaw) continue;
+    try{
+      const oldData = JSON.parse(oldRaw);
+      Object.keys(oldData).forEach(name=>{
+        if(!data[name]) data[name] = oldData[name];
+        else data[name] = Object.assign({}, oldData[name], data[name]);
+      });
+    }catch(e){}
+  }
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+migrateOldStorage();
 
 function ensureItem(name){if(!data[name])data[name]={oneLine:'',rawInput:'',recordSubtitle:'',recordHtml:'',updatedAt:''};}
 function saveAll(){localStorage.setItem(STORAGE_KEY,JSON.stringify(data));}
@@ -195,6 +215,42 @@ function downloadBackup(){
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='economic_freedom_wiki_backup.json';a.click();URL.revokeObjectURL(url);
 }
+
+function importBackup(event){
+  const file = event.target.files && event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      const imported = JSON.parse(e.target.result);
+      if(!imported || typeof imported !== 'object' || Array.isArray(imported)){
+        alert('백업 파일 형식이 올바르지 않습니다.');
+        return;
+      }
+      if(!confirm('백업 파일을 불러오면 현재 저장된 같은 항목은 백업 내용으로 덮어쓸 수 있습니다. 계속할까요?')) return;
+      data = Object.assign({}, data, imported);
+      saveAll();
+      loadCurrent();
+      renderRecentFeed();
+      alert('백업 불러오기가 완료되었습니다.');
+    }catch(err){
+      alert('백업 파일을 읽지 못했습니다.');
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+function deleteCurrentRecord(){
+  ensureItem(current);
+  if(!confirm(current + ' 기록을 삭제할까요? 한줄 평가, 임시 메모, 기록 내용이 모두 비워집니다.')) return;
+  data[current] = { oneLine:'', rawInput:'', recordSubtitle:'', recordHtml:'', updatedAt:new Date().toISOString() };
+  saveAll();
+  loadCurrent();
+  renderRecentFeed();
+  alert('기록이 삭제되었습니다.');
+}
+
 saveAll();renderRecentFeed();
 </script>
 </body>
