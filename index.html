@@ -33,6 +33,9 @@ button.secondary{background:#6b7280}
 .feed-title{font-size:20px;font-weight:800;margin-bottom:10px;color:#111827}
 .feed-text{font-size:17px;white-space:pre-wrap}
 .feed-date{text-align:right;color:#888;font-size:12px;margin-top:12px}
+.search-box{margin:14px 0 10px}
+.search-box input{width:100%;font-size:16px;padding:14px;border:1px solid #ccc;border-radius:10px}
+.search-count{font-size:13px;color:#666;margin:8px 0 12px}
 .empty{color:#666;background:#fff;border:1px dashed #ccc;border-radius:10px;padding:18px}
 @media(max-width:700px){body{display:block}.sidebar{width:100%;border-right:0;border-bottom:1px solid #ddd}.feed-row{grid-template-columns:1fr}.feed-key{justify-content:flex-start;border-right:0;border-bottom:1px solid #ddd}}
 </style>
@@ -68,6 +71,10 @@ button.secondary{background:#6b7280}
   <div class="card">
     <div class="section-title">최근 7일 기록</div>
     <p class="small">최신 작성·수정 기록이 위로 올라온다. 각 카드를 누르면 해당 항목으로 바로 이동한다.</p>
+    <div class="search-box">
+      <input id="keywordSearch" type="text" placeholder="키워드 검색: 예) 이더리움, IREN, 펙트라, 전력" oninput="renderRecentFeed()">
+    </div>
+    <div id="searchCount" class="search-count"></div>
     <div id="recentFeed" class="feed-table"></div>
   </div>
 </div>
@@ -159,12 +166,31 @@ function cleanContent(key,item){
 }
 function renderRecentFeed(){
   const feed=document.getElementById('recentFeed');
+  const searchInput=document.getElementById('keywordSearch');
+  const countBox=document.getElementById('searchCount');
+  const keyword=(searchInput&&searchInput.value?searchInput.value.trim().toLowerCase():'');
   const seven=Date.now()-7*24*60*60*1000;
-  const rows=Object.keys(data).map(key=>{
+  let rows=Object.keys(data).map(key=>{
     const item=data[key]; const updated=item.updatedAt?new Date(item.updatedAt):null;
     return {key,item,updated,content:cleanContent(key,item)};
   }).filter(r=>r.updated&&r.updated.getTime()>=seven&&r.content).sort((a,b)=>b.updated-a.updated);
-  if(!rows.length){feed.innerHTML='<div class="empty">최근 7일 안에 작성된 기록이 없습니다.</div>';return;}
+
+  if(keyword){
+    rows=rows.filter(r=>{
+      const title=firstBulletOrLine(r.content)||'';
+      const haystack=(r.key+' '+title+' '+r.content).toLowerCase();
+      return haystack.includes(keyword);
+    });
+  }
+
+  if(!rows.length){
+    feed.innerHTML='<div class="empty">'+(keyword?'검색 결과가 없습니다.':'최근 7일 안에 작성된 기록이 없습니다.')+'</div>';
+    if(countBox) countBox.innerText=keyword?'검색 결과 0건':'';
+    return;
+  }
+
+  if(countBox) countBox.innerText=keyword?'검색 결과 '+rows.length+'건':'최근 기록 '+rows.length+'건';
+
   feed.innerHTML=rows.map(r=>{
     const title=firstBulletOrLine(r.content)||'제목 없음';
     const body=r.content.length>450?r.content.slice(0,450)+'...':r.content;
