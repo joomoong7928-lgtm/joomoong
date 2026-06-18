@@ -5,190 +5,63 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>경제적 자유를 향하여</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:'Malgun Gothic',Arial,sans-serif;display:flex;min-height:100vh;background:#fafafa;color:#222}
-.sidebar{width:270px;background:#f3f4f6;padding:20px;border-right:1px solid #ddd;overflow:auto}
-.content{flex:1;padding:28px;overflow:auto}
-.menu-title{font-size:20px;font-weight:700;margin-bottom:20px}
-.group{margin:22px 0 10px;font-weight:700;color:#333}
-.item{padding:10px 12px;margin:4px 0;border-radius:8px;cursor:pointer}
-.item:hover{background:#e5e7eb}
-.item.active{background:#111827;color:white}
-.quote{background:#fff;border-left:5px solid #444;padding:18px 20px;border-radius:10px;line-height:1.75;margin-bottom:22px}
-.top-summary{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:18px;margin-bottom:20px}
-.card{background:white;border:1px solid #ddd;border-radius:10px;padding:18px;margin-bottom:16px}
-textarea,input{width:100%;font-size:15px;line-height:1.6;padding:12px;border:1px solid #ccc;border-radius:8px}
-textarea{min-height:120px;resize:vertical}
-button{padding:10px 14px;border:0;border-radius:8px;background:#111827;color:white;cursor:pointer;margin-top:10px;margin-right:8px}
-button.secondary{background:#6b7280}
-.small{font-size:13px;color:#666;line-height:1.6}
-.section-title{font-size:22px;font-weight:700;margin-bottom:8px}
-.saved{font-size:13px;color:#15803d;margin-top:8px}
-.record-title{font-size:15px;font-weight:700;margin-bottom:8px}
-.editor{width:100%;min-height:320px;border:1px solid #ccc;border-radius:8px;padding:14px;background:#fff;line-height:1.7;overflow:auto}
-.editor[contenteditable="false"]{background:#f9fafb}
-.editor img{max-width:100%;height:auto;border:1px solid #ddd;border-radius:8px;margin:10px 0;display:block}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+*{box-sizing:border-box}body{margin:0;font-family:'Malgun Gothic',Arial,sans-serif;display:flex;min-height:100vh;background:#fafafa;color:#222}.sidebar{width:270px;background:#f3f4f6;padding:20px;border-right:1px solid #ddd;overflow:auto}.content{flex:1;padding:28px;overflow:auto}.menu-title{font-size:20px;font-weight:700;margin-bottom:20px}.group{margin:22px 0 10px;font-weight:700;color:#333}.item{padding:10px 12px;margin:4px 0;border-radius:8px;cursor:pointer}.item:hover{background:#e5e7eb}.item.active{background:#111827;color:white}.quote{background:#fff;border-left:5px solid #444;padding:18px 20px;border-radius:10px;line-height:1.75;margin-bottom:22px}.top-summary{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:18px;margin-bottom:20px}.card{background:white;border:1px solid #ddd;border-radius:10px;padding:18px;margin-bottom:16px}textarea,input{width:100%;font-size:15px;line-height:1.6;padding:12px;border:1px solid #ccc;border-radius:8px}textarea{min-height:120px;resize:vertical}button{padding:10px 14px;border:0;border-radius:8px;background:#111827;color:white;cursor:pointer;margin-top:10px;margin-right:8px}button.secondary{background:#6b7280}.small{font-size:13px;color:#666;line-height:1.6}.section-title{font-size:22px;font-weight:700;margin-bottom:8px}.saved{font-size:13px;color:#15803d;margin-top:8px}.record-title{font-size:15px;font-weight:700;margin-bottom:8px}.editor{width:100%;min-height:320px;border:1px solid #ccc;border-radius:8px;padding:14px;background:#fff;line-height:1.7;overflow:auto}.editor[contenteditable="false"]{background:#f9fafb}.editor img{max-width:100%;height:auto;border:1px solid #ddd;border-radius:8px;margin:10px 0;display:block}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.home-title{font-size:24px;font-weight:700;margin-bottom:12px}.feed-item{background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;margin-bottom:12px;cursor:pointer}.feed-item:hover{background:#f9fafb}.feed-meta{font-size:13px;color:#666;margin-bottom:8px}.feed-key{font-weight:700;color:#111827}.feed-content{line-height:1.6;white-space:pre-wrap}.empty{color:#666;background:#fff;border:1px dashed #ccc;border-radius:10px;padding:18px}
 </style>
 </head>
 <body>
 <div class="sidebar">
 <div class="menu-title">📚 경제적 자유를 향하여</div>
-
+<div class="group">🏠 첫 화면</div><div class="item active" onclick="showHome(this)">최근 기록</div>
 <div class="group">📖 스승님</div>
-<div class="item active" onclick="selectItem('송팀장', this)">송팀장</div>
+<div class="item" onclick="selectItem('송팀장', this)">송팀장</div>
 <div class="item" onclick="selectItem('봉현이형', this)">봉현이형</div>
 <div class="item" onclick="selectItem('세상학개론', this)">세상학개론</div>
 <div class="item" onclick="selectItem('가을바람', this)">가을바람</div>
-
 <div class="group">📈 주식</div>
 <div class="item" onclick="selectItem('IREN', this)">IREN</div>
 <div class="item" onclick="selectItem('BMNR', this)">BMNR</div>
 <div class="item" onclick="selectItem('MARA', this)">MARA</div>
 <div class="item" onclick="selectItem('TESLA', this)">TESLA</div>
 <div class="item" onclick="selectItem('Rocket Lab', this)">Rocket Lab</div>
-
 <div class="group">🪙 코인</div>
 <div class="item" onclick="selectItem('비트코인', this)">비트코인</div>
 <div class="item" onclick="selectItem('이더리움', this)">이더리움</div>
 <div class="item" onclick="selectItem('WLFI', this)">WLFI</div>
 </div>
-
 <div class="content">
-<div class="quote">
-<strong>기다림이 없는 경제적 자유는 없다.</strong><br><br>
-내 선택만 맞고 대중의 선택은 무지하다고 생각하는 것은 오만이다.<br>
-스스로를 끊임없이 의심하되, 충분히 검증한 투자 원칙으로 기다리자.
-</div>
+<div class="quote"><strong>기다림이 없는 경제적 자유는 없다.</strong><br><br>내 선택만 맞고 대중의 선택은 무지하다고 생각하는 것은 오만이다.<br>스스로를 끊임없이 의심하되, 충분히 검증한 투자 원칙으로 기다리자.</div>
 
-<div class="top-summary">
-<h3>한줄 평가</h3>
-<textarea id="oneLine" oninput="saveCurrent()" placeholder="이 항목에 대한 한줄 평가를 입력하세요."></textarea>
-<div class="saved" id="saveStatus">자동 저장 대기 중</div>
-</div>
+<div id="homeView"><div class="card"><div class="home-title">최근 7일 기록</div><p class="small">최근 작성·수정한 기록이 최신순으로 표시된다. 형식은 <b>구분인자 + 내용</b>이다.</p><div id="recentFeed"></div></div></div>
 
-<div class="card">
-<div class="section-title" id="currentTitle">송팀장</div>
-<p class="small">텍스트는 이곳에 메모하고, ChatGPT가 정리한 최종 내용은 아래 기록 부분에 붙여넣는다.</p>
-<textarea id="rawInput" oninput="saveCurrent()" placeholder="임시 메모를 입력하세요."></textarea>
-</div>
-
-<div class="card">
-<h3>기록</h3>
-<p class="small">소제목을 먼저 적고, 수정 버튼을 눌러 내용을 추가한다. 이미지 캡처는 기록창 안에 바로 붙여넣으면 텍스트 중간에 들어간다.</p>
-
-<div class="record-title">소제목</div>
-<input id="recordSubtitle" oninput="saveCurrent()" placeholder="예) 10GW 전력 확보와 CAPEX 가정">
-
-<div class="toolbar">
-<button id="editBtn" onclick="toggleEdit()">수정</button>
-<button onclick="insertToday()">오늘 날짜 넣기</button>
-<button class="secondary" onclick="saveCurrent()">저장</button>
-<button class="secondary" onclick="downloadBackup()">전체 백업 다운로드</button>
-</div>
-
-<div id="recordEditor" class="editor" contenteditable="false" oninput="saveCurrent()"></div>
+<div id="editView" style="display:none">
+<div class="top-summary"><h3>한줄 평가</h3><textarea id="oneLine" oninput="saveCurrent()" placeholder="이 항목에 대한 한줄 평가를 입력하세요."></textarea><div class="saved" id="saveStatus">자동 저장 대기 중</div></div>
+<div class="card"><div class="section-title" id="currentTitle">송팀장</div><p class="small">텍스트는 이곳에 메모하고, ChatGPT가 정리한 최종 내용은 아래 기록 부분에 붙여넣는다.</p><textarea id="rawInput" oninput="saveCurrent()" placeholder="임시 메모를 입력하세요."></textarea></div>
+<div class="card"><h3>기록</h3><p class="small">소제목을 먼저 적고, 수정 버튼을 눌러 내용을 추가한다. 이미지 캡처는 기록창 안에 바로 붙여넣으면 텍스트 중간에 들어간다.</p>
+<div class="record-title">소제목</div><input id="recordSubtitle" oninput="saveCurrent()" placeholder="예) 10GW 전력 확보와 CAPEX 가정">
+<div class="toolbar"><button id="editBtn" onclick="toggleEdit()">수정</button><button onclick="insertToday()">오늘 날짜 넣기</button><button class="secondary" onclick="saveCurrent()">저장</button><button class="secondary" onclick="downloadBackup()">전체 백업 다운로드</button></div>
+<div id="recordEditor" class="editor" contenteditable="false" oninput="saveCurrent()"></div></div>
 </div>
 </div>
-
 <script>
-const STORAGE_KEY = 'economic_freedom_wiki_v2';
-let current = '송팀장';
-let data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-let editing = false;
-
-function ensureItem(name){
-  if(!data[name]){
-    data[name] = { oneLine:'', rawInput:'', recordSubtitle:'', recordHtml:'' };
-  }
-}
-
-function saveAll(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
-
-function saveCurrent(){
-  ensureItem(current);
-  data[current].oneLine = document.getElementById('oneLine').value;
-  data[current].rawInput = document.getElementById('rawInput').value;
-  data[current].recordSubtitle = document.getElementById('recordSubtitle').value;
-  data[current].recordHtml = document.getElementById('recordEditor').innerHTML;
-  saveAll();
-  document.getElementById('saveStatus').innerText = '자동 저장됨';
-}
-
-function loadCurrent(){
-  ensureItem(current);
-  document.getElementById('currentTitle').innerText = current;
-  document.getElementById('oneLine').value = data[current].oneLine || '';
-  document.getElementById('rawInput').value = data[current].rawInput || '';
-  document.getElementById('recordSubtitle').value = data[current].recordSubtitle || '';
-  document.getElementById('recordEditor').innerHTML = data[current].recordHtml || '';
-  document.getElementById('saveStatus').innerText = '저장된 내용 불러옴';
-}
-
-function selectItem(name, el){
-  saveCurrent();
-  current = name;
-  document.querySelectorAll('.item').forEach(i=>i.classList.remove('active'));
-  el.classList.add('active');
-  loadCurrent();
-}
-
-function toggleEdit(){
-  editing = !editing;
-  const editor = document.getElementById('recordEditor');
-  const btn = document.getElementById('editBtn');
-  editor.contentEditable = editing ? 'true' : 'false';
-  btn.innerText = editing ? '수정 완료' : '수정';
-  if(editing) editor.focus();
-  saveCurrent();
-}
-
-function today(){
-  const d = new Date();
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-}
-
-function insertToday(){
-  const editor = document.getElementById('recordEditor');
-  if(!editing){ toggleEdit(); }
-  editor.focus();
-  document.execCommand('insertHTML', false, '<p><strong>' + today() + '</strong></p><p>■ 핵심 내용</p><ul><li></li></ul><p>■ 내가 이해한 의미</p><ul><li></li></ul>');
-  saveCurrent();
-}
-
-document.getElementById('recordEditor').addEventListener('paste', function(e){
-  const items = e.clipboardData && e.clipboardData.items;
-  if(!items) return;
-  for(let i=0; i<items.length; i++){
-    const item = items[i];
-    if(item.type.indexOf('image') !== -1){
-      e.preventDefault();
-      const file = item.getAsFile();
-      const reader = new FileReader();
-      reader.onload = function(event){
-        document.execCommand('insertHTML', false, '<img src="' + event.target.result + '">');
-        saveCurrent();
-      };
-      reader.readAsDataURL(file);
-      return;
-    }
-  }
-});
-
-function downloadBackup(){
-  saveCurrent();
-  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'economic_freedom_wiki_backup.json';
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-loadCurrent();
+const STORAGE_KEY='economic_freedom_wiki_v3';const OLD_KEY='economic_freedom_wiki_v2';
+let current='송팀장';let data=JSON.parse(localStorage.getItem(STORAGE_KEY)||localStorage.getItem(OLD_KEY)||'{}');let editing=false;
+function ensureItem(name){if(!data[name]) data[name]={oneLine:'',rawInput:'',recordSubtitle:'',recordHtml:'',updatedAt:''};}
+function saveAll(){localStorage.setItem(STORAGE_KEY,JSON.stringify(data));}
+function saveCurrent(){ensureItem(current);data[current].oneLine=document.getElementById('oneLine').value;data[current].rawInput=document.getElementById('rawInput').value;data[current].recordSubtitle=document.getElementById('recordSubtitle').value;data[current].recordHtml=document.getElementById('recordEditor').innerHTML;data[current].updatedAt=new Date().toISOString();saveAll();document.getElementById('saveStatus').innerText='자동 저장됨';}
+function loadCurrent(){ensureItem(current);document.getElementById('currentTitle').innerText=current;document.getElementById('oneLine').value=data[current].oneLine||'';document.getElementById('rawInput').value=data[current].rawInput||'';document.getElementById('recordSubtitle').value=data[current].recordSubtitle||'';document.getElementById('recordEditor').innerHTML=data[current].recordHtml||'';document.getElementById('saveStatus').innerText='저장된 내용 불러옴';}
+function selectItem(name,el){if(document.getElementById('editView').style.display!=='none')saveCurrent();current=name;document.querySelectorAll('.item').forEach(i=>i.classList.remove('active'));el.classList.add('active');document.getElementById('homeView').style.display='none';document.getElementById('editView').style.display='block';loadCurrent();}
+function showHome(el){if(document.getElementById('editView').style.display!=='none')saveCurrent();document.querySelectorAll('.item').forEach(i=>i.classList.remove('active'));el.classList.add('active');document.getElementById('editView').style.display='none';document.getElementById('homeView').style.display='block';renderRecentFeed();}
+function toggleEdit(){editing=!editing;const editor=document.getElementById('recordEditor'),btn=document.getElementById('editBtn');editor.contentEditable=editing?'true':'false';btn.innerText=editing?'수정 완료':'수정';if(editing)editor.focus();saveCurrent();}
+function today(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function insertToday(){const editor=document.getElementById('recordEditor');if(!editing)toggleEdit();editor.focus();document.execCommand('insertHTML',false,'<p><strong>'+today()+'</strong></p><p>■ 핵심 내용</p><ul><li></li></ul><p>■ 내가 이해한 의미</p><ul><li></li></ul>');saveCurrent();}
+function htmlToText(html){const div=document.createElement('div');div.innerHTML=html||'';return div.innerText.trim();}
+function renderRecentFeed(){const feed=document.getElementById('recentFeed');const sevenDaysAgo=Date.now()-7*24*60*60*1000;const rows=Object.keys(data).map(key=>{const item=data[key];const updated=item.updatedAt?new Date(item.updatedAt):null;const content=htmlToText(item.recordHtml||item.rawInput||'');return{key,subtitle:item.recordSubtitle||'',updated,content};}).filter(r=>r.updated&&r.updated.getTime()>=sevenDaysAgo&&r.content).sort((a,b)=>b.updated-a.updated);if(rows.length===0){feed.innerHTML='<div class="empty">최근 7일 안에 작성된 기록이 없습니다.</div>';return;}feed.innerHTML=rows.map(row=>{const date=row.updated.toLocaleString('ko-KR');const preview=row.content.length>220?row.content.slice(0,220)+'...':row.content;const subtitle=row.subtitle?' · '+escapeHtml(row.subtitle):'';return `<div class="feed-item" onclick="openFromFeed('${escapeAttr(row.key)}')"><div class="feed-meta">${date}</div><div class="feed-content"><span class="feed-key">[${escapeHtml(row.key)}]</span>${subtitle}<br>${escapeHtml(preview)}</div></div>`;}).join('');}
+function openFromFeed(name){const items=Array.from(document.querySelectorAll('.item'));const target=items.find(i=>i.innerText.trim()===name);if(target)selectItem(name,target);}
+function escapeHtml(str){return String(str).replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));}
+function escapeAttr(str){return String(str).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+document.getElementById('recordEditor').addEventListener('paste',function(e){const items=e.clipboardData&&e.clipboardData.items;if(!items)return;for(let i=0;i<items.length;i++){const item=items[i];if(item.type.indexOf('image')!==-1){e.preventDefault();const file=item.getAsFile();const reader=new FileReader();reader.onload=function(event){document.execCommand('insertHTML',false,'<img src="'+event.target.result+'">');saveCurrent();};reader.readAsDataURL(file);return;}}});
+function downloadBackup(){saveCurrent();const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='economic_freedom_wiki_backup.json';a.click();URL.revokeObjectURL(url);}
+saveAll();renderRecentFeed();
 </script>
 </body>
 </html>
