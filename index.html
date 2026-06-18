@@ -88,7 +88,7 @@ button.secondary{background:#6b7280}
     <input id="recordSubtitle" oninput="saveCurrent()" placeholder="예) 10GW 전력 확보와 CAPEX 가정">
     <div class="toolbar">
       <button id="editBtn" onclick="toggleEdit()">수정</button>
-      <button onclick="insertToday()">오늘 날짜 넣기</button>
+      <button onclick="insertBullet()">새 기록 추가</button>
       <button class="secondary" onclick="saveCurrent()">저장</button>
       <button class="secondary" onclick="downloadBackup()">전체 백업 다운로드</button>
     </div>
@@ -141,10 +141,11 @@ function toggleEdit(){
   editing=!editing; const editor=document.getElementById('recordEditor'),btn=document.getElementById('editBtn');
   editor.contentEditable=editing?'true':'false'; btn.innerText=editing?'수정 완료':'수정'; if(editing)editor.focus(); saveCurrent();
 }
-function today(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
-function insertToday(){
-  const ed=document.getElementById('recordEditor'); if(!editing)toggleEdit(); ed.focus();
-  document.execCommand('insertHTML',false,'<p><strong>'+today()+'</strong></p><p>■ 핵심 내용</p><ul><li></li></ul><p>■ 내가 이해한 의미</p><ul><li></li></ul>');
+function insertBullet(){
+  const ed=document.getElementById('recordEditor'); 
+  if(!editing)toggleEdit(); 
+  ed.focus();
+  document.execCommand('insertHTML',false,'<p>• </p>');
   saveCurrent();
 }
 function htmlToText(html){const d=document.createElement('div');d.innerHTML=html||'';return d.innerText.trim();}
