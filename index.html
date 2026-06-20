@@ -6,25 +6,63 @@
 <title>경제적 자유를 향하여</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:'Malgun Gothic',Arial,sans-serif;display:flex;min-height:100vh;background:#fafafa;color:#222}
-.sidebar{width:270px;background:#f3f4f6;padding:20px;border-right:1px solid #ddd;overflow:auto}
+body{margin:0;font-family:'Malgun Gothic',Arial,sans-serif;display:flex;min-height:100vh;background:#f8fafc;color:#1f2937}
+.sidebar{
+  width:280px;background:linear-gradient(180deg,#020617 0%,#0f172a 52%,#111827 100%);
+  padding:26px 22px;border-right:1px solid rgba(148,163,184,.18);overflow:auto;color:#cbd5e1;
+  box-shadow:8px 0 26px rgba(15,23,42,.10)
+}
 .content{flex:1;padding:28px;overflow:auto}
-.menu-title{font-size:20px;font-weight:700;margin-bottom:20px}
-.group{margin:22px 0 10px;font-weight:700;color:#333}
-.item{padding:10px 12px;margin:4px 0;border-radius:8px;cursor:pointer}
-.item:hover{background:#e5e7eb}.item.active{background:#111827;color:white}
-.quote{background:#fff;border-left:5px solid #444;padding:18px 20px;border-radius:10px;line-height:1.75;margin-bottom:22px}
-.card{background:white;border:1px solid #ddd;border-radius:10px;padding:18px;margin-bottom:16px}
-.top-summary{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:18px;margin-bottom:20px}
-textarea,input{width:100%;font-size:15px;line-height:1.6;padding:12px;border:1px solid #ccc;border-radius:8px}
-textarea{min-height:120px;resize:vertical}
-button{padding:10px 14px;border:0;border-radius:8px;background:#111827;color:white;cursor:pointer;margin-top:10px;margin-right:8px}
-button.secondary{background:#6b7280}
-.small{font-size:13px;color:#666;line-height:1.6}.section-title{font-size:22px;font-weight:700;margin-bottom:8px}
-.saved{font-size:13px;color:#15803d;margin-top:8px}.record-title{font-size:15px;font-weight:700;margin-bottom:8px}
-.editor{width:100%;min-height:320px;border:1px solid #ccc;border-radius:8px;padding:14px;background:#fff;line-height:1.7;overflow:auto}
-.editor[contenteditable="false"]{background:#f9fafb}.editor img{max-width:100%;height:auto;border:1px solid #ddd;border-radius:8px;margin:10px 0;display:block}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.menu-title{font-size:21px;font-weight:900;letter-spacing:-.4px;color:#fff;margin-bottom:6px;cursor:pointer}
+.menu-sub{font-size:11px;letter-spacing:2.2px;text-transform:uppercase;color:#64748b;margin-bottom:30px}
+.group{margin:22px 0 11px;font-size:11px;font-weight:800;letter-spacing:2px;color:#64748b}
+.divider{height:1px;background:linear-gradient(90deg,rgba(148,163,184,.22),transparent);margin:22px 0 8px}
+.item{position:relative;padding:11px 12px 11px 17px;margin:3px 0;border-radius:10px;cursor:pointer;color:#cbd5e1;font-size:14px;font-weight:650;letter-spacing:.2px;transition:.15s ease}
+.item:hover{background:rgba(148,163,184,.10);color:#fff}
+.item.active{background:rgba(37,99,235,.18);color:#fff}
+.item.active:before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:999px;background:#60a5fa}
+.hero{
+  position:relative;overflow:hidden;border-radius:24px;padding:46px 48px;margin-bottom:26px;color:#f8fafc;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(255,255,255,.20) 0 1px, transparent 2px),
+    radial-gradient(circle at 70% 28%, rgba(147,197,253,.22), transparent 24%),
+    radial-gradient(circle at 82% 72%, rgba(168,85,247,.18), transparent 26%),
+    radial-gradient(ellipse at 50% 50%, rgba(59,130,246,.16), transparent 52%),
+    linear-gradient(135deg,#030712 0%,#0f172a 45%,#111827 100%);
+  box-shadow:0 18px 45px rgba(15,23,42,.28)
+}
+.hero:before{
+  content:"";position:absolute;inset:-30%;
+  background:radial-gradient(ellipse at center, rgba(226,232,240,.22), transparent 32%),
+             repeating-radial-gradient(circle at 50% 50%, rgba(255,255,255,.10) 0 1px, transparent 1px 18px);
+  transform:rotate(-18deg);opacity:.28;filter:blur(.2px)
+}
+.hero:after{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.05), transparent 35%, rgba(255,255,255,.04)),
+    radial-gradient(circle at 88% 18%, rgba(255,255,255,.55) 0 1px, transparent 2px),
+    radial-gradient(circle at 76% 42%, rgba(255,255,255,.45) 0 1px, transparent 2px),
+    radial-gradient(circle at 64% 70%, rgba(255,255,255,.35) 0 1px, transparent 2px),
+    radial-gradient(circle at 92% 78%, rgba(255,255,255,.32) 0 1px, transparent 2px);
+  opacity:.75
+}
+.hero-title{position:relative;z-index:1;font-size:38px;font-weight:900;letter-spacing:-.8px;margin-bottom:12px}
+.hero-subtitle{position:relative;z-index:1;display:inline-block;font-size:13px;letter-spacing:1.8px;color:#cbd5e1;text-transform:uppercase;margin-bottom:22px}
+.hero-text{position:relative;z-index:1;font-size:18px;line-height:1.85;max-width:850px;color:#e5e7eb}
+.hero-text strong{color:#fff;font-size:20px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 4px 14px rgba(15,23,42,.04)}
+.section-title{font-size:23px;font-weight:900;margin-bottom:8px;color:#111827}
+.small{font-size:13px;color:#64748b;line-height:1.6}
+button{padding:10px 14px;border:0;border-radius:9px;background:#111827;color:white;cursor:pointer;margin-top:10px;margin-right:8px}
+button.secondary{background:#64748b}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}
+.editor{width:100%;min-height:420px;border:1px solid #cbd5e1;border-radius:10px;padding:16px;background:#fff;line-height:1.8;overflow:auto;font-size:16px}
+.editor[contenteditable="false"]{background:#f9fafb}
+.editor img{max-width:100%;height:auto;border:1px solid #ddd;border-radius:8px;margin:10px 0;display:block}
+.search-box{margin:14px 0 10px}
+.search-box input{width:100%;font-size:16px;padding:14px;border:1px solid #ccc;border-radius:10px}
+.search-count{font-size:13px;color:#666;margin:8px 0 12px}
 .feed-table{display:flex;flex-direction:column;gap:12px;margin-top:14px}
 .feed-row{display:grid;grid-template-columns:170px 1fr;background:#fff;border:1px solid #ddd;border-radius:12px;overflow:hidden;cursor:pointer}
 .feed-row:hover{box-shadow:0 4px 14px rgba(0,0,0,.08)}
@@ -34,216 +72,80 @@ button.secondary{background:#6b7280}
 .feed-text{font-size:17px;white-space:pre-wrap}
 .feed-date{text-align:right;color:#888;font-size:12px;margin-top:12px}
 .empty{color:#666;background:#fff;border:1px dashed #ccc;border-radius:10px;padding:18px}
-@media(max-width:700px){body{display:block}.sidebar{width:100%;border-right:0;border-bottom:1px solid #ddd}.feed-row{grid-template-columns:1fr}.feed-key{justify-content:flex-start;border-right:0;border-bottom:1px solid #ddd}}
-
-
-.hero{
-  position:relative;
-  overflow:hidden;
-  border-radius:24px;
-  padding:46px 48px;
-  margin-bottom:26px;
-  color:#f8fafc;
-  background:
-    radial-gradient(circle at 18% 22%, rgba(255,255,255,.20) 0 1px, transparent 2px),
-    radial-gradient(circle at 70% 28%, rgba(147,197,253,.22), transparent 24%),
-    radial-gradient(circle at 82% 72%, rgba(168,85,247,.18), transparent 26%),
-    radial-gradient(ellipse at 50% 50%, rgba(59,130,246,.16), transparent 52%),
-    linear-gradient(135deg,#030712 0%,#0f172a 45%,#111827 100%);
-  box-shadow:0 18px 45px rgba(15,23,42,.28);
-}
-.hero::before{
-  content:"";
-  position:absolute;
-  inset:-30%;
-  background:
-    radial-gradient(ellipse at center, rgba(226,232,240,.22), transparent 32%),
-    repeating-radial-gradient(circle at 50% 50%, rgba(255,255,255,.10) 0 1px, transparent 1px 18px);
-  transform:rotate(-18deg);
-  opacity:.28;
-  filter:blur(.2px);
-}
-.hero::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    linear-gradient(90deg, rgba(255,255,255,.05), transparent 35%, rgba(255,255,255,.04)),
-    radial-gradient(circle at 88% 18%, rgba(255,255,255,.55) 0 1px, transparent 2px),
-    radial-gradient(circle at 76% 42%, rgba(255,255,255,.45) 0 1px, transparent 2px),
-    radial-gradient(circle at 64% 70%, rgba(255,255,255,.35) 0 1px, transparent 2px),
-    radial-gradient(circle at 92% 78%, rgba(255,255,255,.32) 0 1px, transparent 2px);
-  opacity:.75;
-}
-.hero-title{
-  position:relative;
-  z-index:1;
-  font-size:38px;
-  font-weight:900;
-  letter-spacing:-.8px;
-  margin-bottom:12px;
-}
-.hero-subtitle{
-  position:relative;
-  z-index:1;
-  display:inline-block;
-  font-size:13px;
-  letter-spacing:1.8px;
-  color:#cbd5e1;
-  text-transform:uppercase;
-  margin-bottom:22px;
-}
-.hero-text{
-  position:relative;
-  z-index:1;
-  font-size:18px;
-  line-height:1.85;
-  max-width:850px;
-  color:#e5e7eb;
-}
-.hero-text strong{color:#ffffff;font-size:20px}
 @media(max-width:700px){
-  .hero{padding:32px 24px;border-radius:18px}
-  .hero-title{font-size:29px}
-  .hero-text{font-size:16px}
+  body{display:block}.sidebar{width:100%;border-right:0;border-bottom:1px solid #ddd}.content{padding:18px}
+  .hero{padding:32px 24px;border-radius:18px}.hero-title{font-size:29px}.hero-text{font-size:16px}
+  .feed-row{grid-template-columns:1fr}.feed-key{justify-content:flex-start;border-right:0;border-bottom:1px solid #ddd}
 }
-
-
-/* Premium dark sidebar */
-.sidebar{
-  width:280px;
-  background:linear-gradient(180deg,#020617 0%,#0f172a 52%,#111827 100%);
-  padding:26px 22px;
-  border-right:1px solid rgba(148,163,184,.18);
-  overflow:auto;
-  color:#cbd5e1;
-  box-shadow:8px 0 26px rgba(15,23,42,.10);
-}
-.menu-title{
-  font-size:21px;
-  font-weight:900;
-  letter-spacing:-.4px;
-  color:#ffffff;
-  margin-bottom:6px;
-  cursor:pointer;
-}
-.menu-sub{
-  font-size:11px;
-  letter-spacing:2.2px;
-  text-transform:uppercase;
-  color:#64748b;
-  margin-bottom:30px;
-}
-.group{
-  margin:22px 0 11px;
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:2px;
-  color:#64748b;
-}
-.divider{
-  height:1px;
-  background:linear-gradient(90deg,rgba(148,163,184,.22),transparent);
-  margin:22px 0 8px;
-}
-.item{
-  position:relative;
-  padding:11px 12px 11px 17px;
-  margin:3px 0;
-  border-radius:10px;
-  cursor:pointer;
-  color:#cbd5e1;
-  font-size:14px;
-  font-weight:650;
-  letter-spacing:.2px;
-  transition:.15s ease;
-}
-.item:hover{
-  background:rgba(148,163,184,.10);
-  color:#ffffff;
-}
-.item.active{
-  background:rgba(37,99,235,.18);
-  color:#ffffff;
-}
-.item.active:before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:9px;
-  bottom:9px;
-  width:3px;
-  border-radius:999px;
-  background:#60a5fa;
-}
-
 </style>
 </head>
 <body>
 <div class="sidebar">
-<div class="menu-title" onclick="showHomeFromTitle()">JOOMOONG</div>
-<div class="menu-sub">Investment Research · v1.20</div>
+  <div class="menu-title" onclick="showHome()">JOOMOONG</div>
+  <div class="menu-sub">Investment Research · v1.21</div>
 
-<div class="group">STUDY</div>
-<div class="item" data-name="송팀장" onclick="selectItem('송팀장', this)">송팀장</div>
-<div class="item" data-name="봉현이형" onclick="selectItem('봉현이형', this)">봉현이형</div>
-<div class="item" data-name="세상학개론" onclick="selectItem('세상학개론', this)">세상학개론</div>
-<div class="item" data-name="가을바람" onclick="selectItem('가을바람', this)">가을바람</div>
+  <div class="group">STUDY</div>
+  <div class="item" data-name="송팀장" onclick="selectItem('송팀장', this)">송팀장</div>
+  <div class="item" data-name="봉현이형" onclick="selectItem('봉현이형', this)">봉현이형</div>
+  <div class="item" data-name="세상학개론" onclick="selectItem('세상학개론', this)">세상학개론</div>
+  <div class="item" data-name="가을바람" onclick="selectItem('가을바람', this)">가을바람</div>
 
-<div class="divider"></div>
-<div class="group">EQUITIES</div>
-<div class="item" data-name="IREN" onclick="selectItem('IREN', this)">IREN</div>
-<div class="item" data-name="BITMINE" onclick="selectItem('BITMINE', this)">BITMINE</div>
-<div class="item" data-name="MARA" onclick="selectItem('MARA', this)">MARA</div>
-<div class="item" data-name="TESLA" onclick="selectItem('TESLA', this)">TESLA</div>
-<div class="item" data-name="Rocket Lab" onclick="selectItem('Rocket Lab', this)">ROCKET LAB</div>
-<div class="item" data-name="AbCellera" onclick="selectItem('AbCellera', this)">ABCELLERA</div>
-<div class="item" data-name="Alpha & Omega" onclick="selectItem('Alpha & Omega', this)">ALPHA & OMEGA</div>
+  <div class="divider"></div>
+  <div class="group">EQUITIES</div>
+  <div class="item" data-name="IREN" onclick="selectItem('IREN', this)">IREN</div>
+  <div class="item" data-name="BITMINE" onclick="selectItem('BITMINE', this)">BITMINE</div>
+  <div class="item" data-name="MARA" onclick="selectItem('MARA', this)">MARA</div>
+  <div class="item" data-name="TESLA" onclick="selectItem('TESLA', this)">TESLA</div>
+  <div class="item" data-name="Rocket Lab" onclick="selectItem('Rocket Lab', this)">ROCKET LAB</div>
+  <div class="item" data-name="AbCellera" onclick="selectItem('AbCellera', this)">ABCELLERA</div>
+  <div class="item" data-name="Alpha & Omega" onclick="selectItem('Alpha & Omega', this)">ALPHA & OMEGA</div>
 
-<div class="divider"></div>
-<div class="group">DIGITAL ASSETS</div>
-<div class="item" data-name="비트코인" onclick="selectItem('비트코인', this)">BITCOIN</div>
-<div class="item" data-name="이더리움" onclick="selectItem('이더리움', this)">ETHEREUM</div>
-<div class="item" data-name="WLFI" onclick="selectItem('WLFI', this)">WLFI</div>
+  <div class="divider"></div>
+  <div class="group">DIGITAL ASSETS</div>
+  <div class="item" data-name="비트코인" onclick="selectItem('비트코인', this)">BITCOIN</div>
+  <div class="item" data-name="이더리움" onclick="selectItem('이더리움', this)">ETHEREUM</div>
+  <div class="item" data-name="WLFI" onclick="selectItem('WLFI', this)">WLFI</div>
 </div>
 
 <div class="content">
-
-<div class="hero">
-<div class="hero-title">경제적 자유를 향하여</div>
-<div class="hero-subtitle">Investment Research · Knowledge Archive</div>
-<div class="hero-text">
-<strong>기다림이 없는 경제적 자유는 없다.</strong><br><br>
-내 선택만 맞고 대중의 선택은 무지하다고 생각하는 것은 오만이다.<br>
-스스로를 끊임없이 의심하되, 충분히 검증한 투자 원칙으로 기다리자.
-</div>
-</div>
-
-
-<div id="homeView">
-  <div class="card">
-    <div class="section-title">최근 7일 기록</div>
-    <p class="small">최신 작성·수정 기록이 위로 올라온다. 각 카드를 누르면 해당 항목으로 바로 이동한다.</p>
-    <div id="recentFeed" class="feed-table"></div>
-  </div>
-</div>
-
-<div id="editView" style="display:none">
-  <div class="card">
-    <div class="section-title" id="currentTitle">IREN</div>
-    <p class="small">아래 기록창에 바로 입력하면 자동 저장된다. 이미지 캡처는 기록창 안에 그대로 붙여넣을 수 있다.</p>
-    <div class="toolbar">
-      <button id="editBtn" onclick="toggleEdit()">수정</button>
-      <button onclick="insertBullet()">새 기록 추가</button>
-      <button class="secondary" onclick="saveCurrent()">저장</button>
-      <button class="secondary" onclick="downloadBackup()">전체 백업 다운로드</button>
-      <button class="secondary" onclick="document.getElementById('backupInput').click()">백업 불러오기</button>
-      <button class="secondary" onclick="deleteCurrentRecord()">기록 삭제</button>
-      <input id="backupInput" type="file" accept="application/json" style="display:none" onchange="importBackup(event)">
+  <div class="hero">
+    <div class="hero-title">경제적 자유를 향하여</div>
+    <div class="hero-subtitle">Investment Research · Knowledge Archive</div>
+    <div class="hero-text">
+      <strong>기다림이 없는 경제적 자유는 없다.</strong><br>
+      내 선택만 맞고 대중의 선택은 무지하다고 생각하는 것은 오만이다.<br>
+      스스로를 끊임없이 의심하되, 충분히 검증한 투자 원칙으로 기다리자.
     </div>
-    <div id="recordEditor" class="editor" contenteditable="false" oninput="saveCurrent()"></div>
   </div>
-</div>
+
+  <div id="homeView">
+    <div class="card">
+      <div class="section-title">최근 7일 기록</div>
+      <p class="small">최신 작성·수정 기록이 위로 올라온다. 각 카드를 누르면 해당 항목으로 바로 이동한다.</p>
+      <div class="search-box">
+        <input id="keywordSearch" type="text" placeholder="키워드 검색: 예) 이더리움, IREN, 펙트라, 전력" oninput="renderRecentFeed()">
+      </div>
+      <div id="searchCount" class="search-count"></div>
+      <div id="recentFeed" class="feed-table"></div>
+    </div>
+  </div>
+
+  <div id="editView" style="display:none">
+    <div class="card">
+      <div class="section-title" id="currentTitle">IREN</div>
+      <p class="small">아래 기록창에 바로 입력하면 자동 저장된다. 이미지 캡처는 기록창 안에 그대로 붙여넣을 수 있다.</p>
+      <div class="toolbar">
+        <button id="editBtn" onclick="toggleEdit()">수정</button>
+        <button onclick="insertBullet()">새 기록 추가</button>
+        <button class="secondary" onclick="saveCurrent()">저장</button>
+        <button class="secondary" onclick="downloadBackup()">전체 백업 다운로드</button>
+        <button class="secondary" onclick="document.getElementById('backupInput').click()">백업 불러오기</button>
+        <button class="secondary" onclick="deleteCurrentRecord()">기록 삭제</button>
+        <input id="backupInput" type="file" accept="application/json" style="display:none" onchange="importBackup(event)">
+      </div>
+      <div id="recordEditor" class="editor" contenteditable="false" oninput="saveCurrent()"></div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -252,10 +154,33 @@ const OLD_KEYS=['economic_freedom_wiki_v3','economic_freedom_wiki_v2','economic_
 let loaded=localStorage.getItem(STORAGE_KEY);
 if(!loaded){for(const k of OLD_KEYS){loaded=localStorage.getItem(k);if(loaded)break;}}
 let data=JSON.parse(loaded||'{}');
-let current='송팀장', editing=false;
+let current='IREN';
+let editing=false;
 
-function ensureItem(name){if(!data[name])data[name]={recordHtml:'',updatedAt:''};};};}
+function migrateOldStorage(){
+  for(const k of OLD_KEYS){
+    const oldRaw=localStorage.getItem(k);
+    if(!oldRaw)continue;
+    try{
+      const oldData=JSON.parse(oldRaw);
+      Object.keys(oldData).forEach(name=>{
+        if(!data[name]) data[name]=oldData[name];
+        if(data[name] && data[name].recordHtml===undefined){
+          data[name].recordHtml=data[name].organizedOutput||data[name].rawInput||'';
+        }
+      });
+    }catch(e){}
+  }
+  saveAll();
+}
+
+function ensureItem(name){
+  if(!data[name]) data[name]={recordHtml:'',updatedAt:''};
+  if(data[name].recordHtml===undefined) data[name].recordHtml=data[name].organizedOutput||data[name].rawInput||'';
+}
+
 function saveAll(){localStorage.setItem(STORAGE_KEY,JSON.stringify(data));}
+
 function saveCurrent(){
   ensureItem(current);
   const editor=document.getElementById('recordEditor');
@@ -264,15 +189,18 @@ function saveCurrent(){
   data[current].updatedAt=new Date().toISOString();
   saveAll();
 }
+
 function loadCurrent(){
   ensureItem(current);
   document.getElementById('currentTitle').innerText=current;
   const editor=document.getElementById('recordEditor');
   editor.innerHTML=data[current].recordHtml||'';
   editor.contentEditable='false';
+  editing=false;
   const btn=document.getElementById('editBtn');
   if(btn)btn.innerText='수정';
 }
+
 function selectItem(name,el){
   if(document.getElementById('editView').style.display!=='none')saveCurrent();
   current=name;
@@ -280,10 +208,10 @@ function selectItem(name,el){
   if(el)el.classList.add('active');
   document.getElementById('homeView').style.display='none';
   document.getElementById('editView').style.display='block';
-  editing=false;
   loadCurrent();
 }
-function showHomeFromTitle(){
+
+function showHome(){
   if(document.getElementById('editView').style.display!=='none')saveCurrent();
   document.querySelectorAll('.item').forEach(i=>i.classList.remove('active'));
   document.getElementById('editView').style.display='none';
@@ -291,15 +219,15 @@ function showHomeFromTitle(){
   renderRecentFeed();
 }
 
-function showHome(el){
-  if(document.getElementById('editView').style.display!=='none')saveCurrent();
-  document.querySelectorAll('.item').forEach(i=>i.classList.remove('active')); if(el)el.classList.add('active');
-  document.getElementById('editView').style.display='none'; document.getElementById('homeView').style.display='block'; renderRecentFeed();
-}
 function toggleEdit(){
-  editing=!editing; const editor=document.getElementById('recordEditor'),btn=document.getElementById('editBtn');
-  editor.contentEditable=editing?'true':'false'; btn.innerText=editing?'수정 완료':'수정'; if(editing)editor.focus(); saveCurrent();
+  const editor=document.getElementById('recordEditor');
+  editing=!editing;
+  editor.contentEditable=editing?'true':'false';
+  document.getElementById('editBtn').innerText=editing?'수정 완료':'수정';
+  if(editing)editor.focus();
+  saveCurrent();
 }
+
 function insertBullet(){
   const ed=document.getElementById('recordEditor');
   if(!editing)toggleEdit();
@@ -307,21 +235,55 @@ function insertBullet(){
   document.execCommand('insertHTML',false,'<p>• </p>');
   saveCurrent();
 }
-function htmlToText(html){const d=document.createElement('div');d.innerHTML=html||'';return d.innerText.trim();}
+
+function htmlToText(html){
+  const d=document.createElement('div');
+  d.innerHTML=html||'';
+  return d.innerText.trim();
+}
+
 function cleanContent(key,item){
+  ensureItem(key);
   let text=htmlToText(item.recordHtml||'');
   text=text.replace(new RegExp('^\\\\['+escapeReg(key)+'\\\\]\\\\s*'),'').trim();
-  text=text.replace(/^\\d{4}[.\\-]\\d{1,2}[.\\-]\\d{1,2}.*$/m,'').trim();
   return text;
 }
+
+function firstBulletOrLine(text){
+  const lines=(text||'').split('\\n').map(s=>s.trim()).filter(Boolean);
+  const bullet=lines.find(s=>s.startsWith('•')||s.startsWith('-'));
+  return (bullet||lines[0]||'').replace(/^[•\\-]\\s*/,'');
+}
+
 function renderRecentFeed(){
   const feed=document.getElementById('recentFeed');
+  const searchInput=document.getElementById('keywordSearch');
+  const countBox=document.getElementById('searchCount');
+  const keyword=(searchInput&&searchInput.value?searchInput.value.trim().toLowerCase():'');
   const seven=Date.now()-7*24*60*60*1000;
-  const rows=Object.keys(data).map(key=>{
-    const item=data[key]; const updated=item.updatedAt?new Date(item.updatedAt):null;
+  let rows=Object.keys(data).map(key=>{
+    ensureItem(key);
+    const item=data[key];
+    const updated=item.updatedAt?new Date(item.updatedAt):null;
     return {key,item,updated,content:cleanContent(key,item)};
   }).filter(r=>r.updated&&r.updated.getTime()>=seven&&r.content).sort((a,b)=>b.updated-a.updated);
-  if(!rows.length){feed.innerHTML='<div class="empty">최근 7일 안에 작성된 기록이 없습니다.</div>';return;}
+
+  if(keyword){
+    rows=rows.filter(r=>{
+      const title=firstBulletOrLine(r.content)||'';
+      const haystack=(r.key+' '+title+' '+r.content).toLowerCase();
+      return haystack.includes(keyword);
+    });
+  }
+
+  if(!rows.length){
+    feed.innerHTML='<div class="empty">'+(keyword?'검색 결과가 없습니다.':'최근 7일 안에 작성된 기록이 없습니다.')+'</div>';
+    if(countBox)countBox.innerText=keyword?'검색 결과 0건':'';
+    return;
+  }
+
+  if(countBox)countBox.innerText=keyword?'검색 결과 '+rows.length+'건':'최근 기록 '+rows.length+'건';
+
   feed.innerHTML=rows.map(r=>{
     const title=firstBulletOrLine(r.content)||'제목 없음';
     const body=r.content.length>450?r.content.slice(0,450)+'...':r.content;
@@ -336,24 +298,42 @@ function renderRecentFeed(){
     </div>`;
   }).join('');
 }
-function firstLine(text){return (text||'').split('\\n').map(s=>s.trim()).find(Boolean)||'';}
-function firstBulletOrLine(text){
-  const lines=(text||'').split('\\n').map(s=>s.trim()).filter(Boolean);
-  const bullet=lines.find(s=>s.startsWith('•')||s.startsWith('-'));
-  return (bullet||lines[0]||'').replace(/^[•\-]\s*/,'');
+
+function openFromFeed(name){
+  const target=Array.from(document.querySelectorAll('.item')).find(i=>i.dataset.name===name||i.innerText.trim()===name);
+  selectItem(name,target);
 }
-function openFromFeed(name){const target=Array.from(document.querySelectorAll('.item')).find(i=>i.dataset.name===name||i.innerText.trim()===name);selectItem(name,target);}
-function escapeHtml(str){return String(str).replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));}
-function escapeAttr(str){return String(str).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
-function escapeReg(str){return String(str).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+
 document.getElementById('recordEditor').addEventListener('paste',function(e){
-  const items=e.clipboardData&&e.clipboardData.items;if(!items)return;
-  for(let i=0;i<items.length;i++){const item=items[i];if(item.type.indexOf('image')!==-1){
-    e.preventDefault();const file=item.getAsFile();const reader=new FileReader();
-    reader.onload=function(ev){document.execCommand('insertHTML',false,'<img src="'+ev.target.result+'">');saveCurrent();};
-    reader.readAsDataURL(file);return;
-  }}
+  const items=e.clipboardData&&e.clipboardData.items;
+  if(!items)return;
+  for(let i=0;i<items.length;i++){
+    const item=items[i];
+    if(item.type.indexOf('image')!==-1){
+      e.preventDefault();
+      const file=item.getAsFile();
+      const reader=new FileReader();
+      reader.onload=function(ev){
+        document.execCommand('insertHTML',false,'<img src="'+ev.target.result+'">');
+        saveCurrent();
+      };
+      reader.readAsDataURL(file);
+      return;
+    }
+  }
 });
+
+function downloadBackup(){
+  if(document.getElementById('editView').style.display!=='none')saveCurrent();
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='economic_freedom_wiki_backup.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 function importBackup(event){
   const file=event.target.files&&event.target.files[0];
   if(!file)return;
@@ -364,7 +344,9 @@ function importBackup(event){
       if(!imported||typeof imported!=='object'||Array.isArray(imported)){alert('백업 파일 형식이 올바르지 않습니다.');return;}
       if(!confirm('백업 파일을 불러오면 현재 저장된 같은 항목은 백업 내용으로 덮어쓸 수 있습니다. 계속할까요?'))return;
       data=Object.assign({},data,imported);
-      saveAll();loadCurrent();renderRecentFeed();
+      saveAll();
+      loadCurrent();
+      renderRecentFeed();
       alert('백업 불러오기가 완료되었습니다.');
     }catch(err){alert('백업 파일을 읽지 못했습니다.');}
     event.target.value='';
@@ -376,16 +358,18 @@ function deleteCurrentRecord(){
   ensureItem(current);
   if(!confirm(current+' 기록을 삭제할까요?'))return;
   data[current]={recordHtml:'',updatedAt:new Date().toISOString()};
-  saveAll();loadCurrent();renderRecentFeed();
+  saveAll();
+  loadCurrent();
+  renderRecentFeed();
   alert('기록이 삭제되었습니다.');
 }
 
-function downloadBackup(){
-  if(document.getElementById('editView').style.display!=='none')saveCurrent();
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='economic_freedom_wiki_backup.json';a.click();URL.revokeObjectURL(url);
-}
-saveAll();renderRecentFeed();
+function escapeHtml(str){return String(str).replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));}
+function escapeAttr(str){return String(str).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+function escapeReg(str){return String(str).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+
+migrateOldStorage();
+renderRecentFeed();
 </script>
 </body>
 </html>
