@@ -108,28 +108,101 @@ button.secondary{background:#6b7280}
   .hero-text{font-size:16px}
 }
 
+
+/* Premium dark sidebar */
+.sidebar{
+  width:280px;
+  background:linear-gradient(180deg,#020617 0%,#0f172a 52%,#111827 100%);
+  padding:26px 22px;
+  border-right:1px solid rgba(148,163,184,.18);
+  overflow:auto;
+  color:#cbd5e1;
+  box-shadow:8px 0 26px rgba(15,23,42,.10);
+}
+.menu-title{
+  font-size:21px;
+  font-weight:900;
+  letter-spacing:-.4px;
+  color:#ffffff;
+  margin-bottom:6px;
+  cursor:pointer;
+}
+.menu-sub{
+  font-size:11px;
+  letter-spacing:2.2px;
+  text-transform:uppercase;
+  color:#64748b;
+  margin-bottom:30px;
+}
+.group{
+  margin:22px 0 11px;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:2px;
+  color:#64748b;
+}
+.divider{
+  height:1px;
+  background:linear-gradient(90deg,rgba(148,163,184,.22),transparent);
+  margin:22px 0 8px;
+}
+.item{
+  position:relative;
+  padding:11px 12px 11px 17px;
+  margin:3px 0;
+  border-radius:10px;
+  cursor:pointer;
+  color:#cbd5e1;
+  font-size:14px;
+  font-weight:650;
+  letter-spacing:.2px;
+  transition:.15s ease;
+}
+.item:hover{
+  background:rgba(148,163,184,.10);
+  color:#ffffff;
+}
+.item.active{
+  background:rgba(37,99,235,.18);
+  color:#ffffff;
+}
+.item.active:before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:9px;
+  bottom:9px;
+  width:3px;
+  border-radius:999px;
+  background:#60a5fa;
+}
+
 </style>
 </head>
 <body>
 <div class="sidebar">
-<div class="menu-title">📚 경제적 자유를 향하여</div>
-<div class="group">🏠 첫 화면</div>
-<div class="item active" onclick="showHome(this)">최근 기록</div>
-<div class="group">📖 스승님</div>
-<div class="item" onclick="selectItem('송팀장', this)">송팀장</div>
-<div class="item" onclick="selectItem('봉현이형', this)">봉현이형</div>
-<div class="item" onclick="selectItem('세상학개론', this)">세상학개론</div>
-<div class="item" onclick="selectItem('가을바람', this)">가을바람</div>
-<div class="group">📈 주식</div>
-<div class="item" onclick="selectItem('IREN', this)">IREN</div>
-<div class="item" onclick="selectItem('BMNR', this)">BMNR</div>
-<div class="item" onclick="selectItem('MARA', this)">MARA</div>
-<div class="item" onclick="selectItem('TESLA', this)">TESLA</div>
-<div class="item" onclick="selectItem('Rocket Lab', this)">Rocket Lab</div>
-<div class="group">🪙 코인</div>
-<div class="item" onclick="selectItem('비트코인', this)">비트코인</div>
-<div class="item" onclick="selectItem('이더리움', this)">이더리움</div>
-<div class="item" onclick="selectItem('WLFI', this)">WLFI</div>
+<div class="menu-title" onclick="showHomeFromTitle()">경제적 자유를 향하여</div>
+<div class="menu-sub">Investment Research</div>
+
+<div class="group">STUDY</div>
+<div class="item" data-name="송팀장" onclick="selectItem('송팀장', this)">송팀장</div>
+<div class="item" data-name="봉현이형" onclick="selectItem('봉현이형', this)">봉현이형</div>
+<div class="item" data-name="세상학개론" onclick="selectItem('세상학개론', this)">세상학개론</div>
+<div class="item" data-name="가을바람" onclick="selectItem('가을바람', this)">가을바람</div>
+
+<div class="divider"></div>
+<div class="group">EQUITIES</div>
+<div class="item" data-name="IREN" onclick="selectItem('IREN', this)">IREN</div>
+<div class="item" data-name="BMNR" onclick="selectItem('BMNR', this)">BMNR</div>
+<div class="item" data-name="MARA" onclick="selectItem('MARA', this)">MARA</div>
+<div class="item" data-name="TESLA" onclick="selectItem('TESLA', this)">TESLA</div>
+<div class="item" data-name="Rocket Lab" onclick="selectItem('Rocket Lab', this)">ROCKET LAB</div>
+
+<div class="divider"></div>
+<div class="group">DIGITAL ASSETS</div>
+<div class="item" data-name="비트코인" onclick="selectItem('비트코인', this)">BITCOIN</div>
+<div class="item" data-name="이더리움" onclick="selectItem('이더리움', this)">ETHEREUM</div>
+<div class="item" data-name="WLFI" onclick="selectItem('WLFI', this)">WLFI</div>
 </div>
 
 <div class="content">
@@ -213,6 +286,14 @@ function selectItem(name,el){
   current=name; document.querySelectorAll('.item').forEach(i=>i.classList.remove('active')); if(el)el.classList.add('active');
   document.getElementById('homeView').style.display='none'; document.getElementById('editView').style.display='block'; loadCurrent();
 }
+function showHomeFromTitle(){
+  if(document.getElementById('editView').style.display!=='none')saveCurrent();
+  document.querySelectorAll('.item').forEach(i=>i.classList.remove('active'));
+  document.getElementById('editView').style.display='none';
+  document.getElementById('homeView').style.display='block';
+  renderRecentFeed();
+}
+
 function showHome(el){
   if(document.getElementById('editView').style.display!=='none')saveCurrent();
   document.querySelectorAll('.item').forEach(i=>i.classList.remove('active')); if(el)el.classList.add('active');
@@ -258,7 +339,7 @@ function renderRecentFeed(){
   }).join('');
 }
 function firstLine(text){return (text||'').split('\\n').map(s=>s.trim()).find(Boolean)||'';}
-function openFromFeed(name){const target=Array.from(document.querySelectorAll('.item')).find(i=>i.innerText.trim()===name);selectItem(name,target);}
+function openFromFeed(name){const target=Array.from(document.querySelectorAll('.item')).find(i=>i.dataset.name===name||i.innerText.trim()===name);selectItem(name,target);}
 function escapeHtml(str){return String(str).replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));}
 function escapeAttr(str){return String(str).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
 function escapeReg(str){return String(str).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
