@@ -182,7 +182,7 @@ button.secondary{background:#6b7280}
 <body>
 <div class="sidebar">
 <div class="menu-title" onclick="showHomeFromTitle()">JOOMOONG</div>
-<div class="menu-sub">Investment Research</div>
+<div class="menu-sub">Investment Research · v1.20</div>
 
 <div class="group">STUDY</div>
 <div class="item" data-name="송팀장" onclick="selectItem('송팀장', this)">송팀장</div>
@@ -229,24 +229,17 @@ button.secondary{background:#6b7280}
 </div>
 
 <div id="editView" style="display:none">
-  <div class="top-summary"><h3>한줄 평가</h3>
-    <textarea id="oneLine" oninput="saveCurrent()" placeholder="이 항목에 대한 한줄 평가를 입력하세요."></textarea>
-    <div class="saved" id="saveStatus">자동 저장 대기 중</div>
-  </div>
   <div class="card">
     <div class="section-title" id="currentTitle">송팀장</div>
-    <p class="small">텍스트는 이곳에 메모하고, ChatGPT가 정리한 최종 내용은 아래 기록 부분에 붙여넣는다.</p>
-    <textarea id="rawInput" oninput="saveCurrent()" placeholder="임시 메모를 입력하세요."></textarea>
-  </div>
-  <div class="card"><h3>기록</h3>
-    <p class="small">소제목을 먼저 적고, 수정 버튼을 눌러 내용을 추가한다. 이미지 캡처는 기록창 안에 바로 붙여넣으면 텍스트 중간에 들어간다.</p>
-    <div class="record-title">소제목</div>
-    <input id="recordSubtitle" oninput="saveCurrent()" placeholder="예) 10GW 전력 확보와 CAPEX 가정">
+    <p class="small">수정 버튼을 눌러 바로 내용을 추가한다. 이미지 캡처는 기록창 안에 바로 붙여넣으면 텍스트 중간에 들어간다.</p>
     <div class="toolbar">
       <button id="editBtn" onclick="toggleEdit()">수정</button>
-      <button onclick="insertToday()">오늘 날짜 넣기</button>
+      <button onclick="insertBullet()">새 기록 추가</button>
       <button class="secondary" onclick="saveCurrent()">저장</button>
       <button class="secondary" onclick="downloadBackup()">전체 백업 다운로드</button>
+      <button class="secondary" onclick="document.getElementById('backupInput').click()">백업 불러오기</button>
+      <button class="secondary" onclick="deleteCurrentRecord()">기록 삭제</button>
+      <input id="backupInput" type="file" accept="application/json" style="display:none" onchange="importBackup(event)">
     </div>
     <div id="recordEditor" class="editor" contenteditable="false" oninput="saveCurrent()"></div>
   </div>
@@ -261,27 +254,20 @@ if(!loaded){for(const k of OLD_KEYS){loaded=localStorage.getItem(k);if(loaded)br
 let data=JSON.parse(loaded||'{}');
 let current='송팀장', editing=false;
 
-function ensureItem(name){if(!data[name])data[name]={oneLine:'',rawInput:'',recordSubtitle:'',recordHtml:'',updatedAt:''};}
+function ensureItem(name){if(!data[name])data[name]={recordHtml:'',updatedAt:''};};}
 function saveAll(){localStorage.setItem(STORAGE_KEY,JSON.stringify(data));}
 function saveCurrent(){
   ensureItem(current);
-  const ol=document.getElementById('oneLine'); if(!ol)return;
-  data[current].oneLine=ol.value;
-  data[current].rawInput=document.getElementById('rawInput').value;
-  data[current].recordSubtitle=document.getElementById('recordSubtitle').value;
-  data[current].recordHtml=document.getElementById('recordEditor').innerHTML;
+  const editor=document.getElementById('recordEditor');
+  if(!editor)return;
+  data[current].recordHtml=editor.innerHTML;
   data[current].updatedAt=new Date().toISOString();
   saveAll();
-  document.getElementById('saveStatus').innerText='자동 저장됨';
 }
 function loadCurrent(){
   ensureItem(current);
   document.getElementById('currentTitle').innerText=current;
-  document.getElementById('oneLine').value=data[current].oneLine||'';
-  document.getElementById('rawInput').value=data[current].rawInput||'';
-  document.getElementById('recordSubtitle').value=data[current].recordSubtitle||'';
   document.getElementById('recordEditor').innerHTML=data[current].recordHtml||'';
-  document.getElementById('saveStatus').innerText='저장된 내용 불러옴';
 }
 function selectItem(name,el){
   if(document.getElementById('editView').style.display!=='none')saveCurrent();
@@ -305,15 +291,16 @@ function toggleEdit(){
   editing=!editing; const editor=document.getElementById('recordEditor'),btn=document.getElementById('editBtn');
   editor.contentEditable=editing?'true':'false'; btn.innerText=editing?'수정 완료':'수정'; if(editing)editor.focus(); saveCurrent();
 }
-function today(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
-function insertToday(){
-  const ed=document.getElementById('recordEditor'); if(!editing)toggleEdit(); ed.focus();
-  document.execCommand('insertHTML',false,'<p><strong>'+today()+'</strong></p><p>■ 핵심 내용</p><ul><li></li></ul><p>■ 내가 이해한 의미</p><ul><li></li></ul>');
+function insertBullet(){
+  const ed=document.getElementById('recordEditor');
+  if(!editing)toggleEdit();
+  ed.focus();
+  document.execCommand('insertHTML',false,'<p>• </p>');
   saveCurrent();
 }
 function htmlToText(html){const d=document.createElement('div');d.innerHTML=html||'';return d.innerText.trim();}
 function cleanContent(key,item){
-  let text=htmlToText(item.recordHtml||item.rawInput||'');
+  let text=htmlToText(item.recordHtml||'');
   text=text.replace(new RegExp('^\\\\['+escapeReg(key)+'\\\\]\\\\s*'),'').trim();
   text=text.replace(/^\\d{4}[.\\-]\\d{1,2}[.\\-]\\d{1,2}.*$/m,'').trim();
   return text;
@@ -327,7 +314,7 @@ function renderRecentFeed(){
   }).filter(r=>r.updated&&r.updated.getTime()>=seven&&r.content).sort((a,b)=>b.updated-a.updated);
   if(!rows.length){feed.innerHTML='<div class="empty">최근 7일 안에 작성된 기록이 없습니다.</div>';return;}
   feed.innerHTML=rows.map(r=>{
-    const title=r.item.recordSubtitle||firstLine(r.content)||'제목 없음';
+    const title=firstBulletOrLine(r.content)||'제목 없음';
     const body=r.content.length>450?r.content.slice(0,450)+'...':r.content;
     const date=r.updated.toLocaleString('ko-KR');
     return `<div class="feed-row" onclick="openFromFeed('${escapeAttr(r.key)}')">
@@ -341,6 +328,11 @@ function renderRecentFeed(){
   }).join('');
 }
 function firstLine(text){return (text||'').split('\\n').map(s=>s.trim()).find(Boolean)||'';}
+function firstBulletOrLine(text){
+  const lines=(text||'').split('\\n').map(s=>s.trim()).filter(Boolean);
+  const bullet=lines.find(s=>s.startsWith('•')||s.startsWith('-'));
+  return (bullet||lines[0]||'').replace(/^[•\-]\s*/,'');
+}
 function openFromFeed(name){const target=Array.from(document.querySelectorAll('.item')).find(i=>i.dataset.name===name||i.innerText.trim()===name);selectItem(name,target);}
 function escapeHtml(str){return String(str).replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));}
 function escapeAttr(str){return String(str).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
@@ -353,6 +345,32 @@ document.getElementById('recordEditor').addEventListener('paste',function(e){
     reader.readAsDataURL(file);return;
   }}
 });
+function importBackup(event){
+  const file=event.target.files&&event.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const imported=JSON.parse(e.target.result);
+      if(!imported||typeof imported!=='object'||Array.isArray(imported)){alert('백업 파일 형식이 올바르지 않습니다.');return;}
+      if(!confirm('백업 파일을 불러오면 현재 저장된 같은 항목은 백업 내용으로 덮어쓸 수 있습니다. 계속할까요?'))return;
+      data=Object.assign({},data,imported);
+      saveAll();loadCurrent();renderRecentFeed();
+      alert('백업 불러오기가 완료되었습니다.');
+    }catch(err){alert('백업 파일을 읽지 못했습니다.');}
+    event.target.value='';
+  };
+  reader.readAsText(file);
+}
+
+function deleteCurrentRecord(){
+  ensureItem(current);
+  if(!confirm(current+' 기록을 삭제할까요?'))return;
+  data[current]={recordHtml:'',updatedAt:new Date().toISOString()};
+  saveAll();loadCurrent();renderRecentFeed();
+  alert('기록이 삭제되었습니다.');
+}
+
 function downloadBackup(){
   if(document.getElementById('editView').style.display!=='none')saveCurrent();
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
